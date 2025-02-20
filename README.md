@@ -45,7 +45,7 @@ After using this preprocessor, you can use `stylex` attribute (html elements onl
 will be transformed into
 
 ```svelte
-<div {...attrs([styles.container, margin.xAuto])}>
+<div {...attrs(styles.container, margin.xAuto)}>
     <div {...attrs(styles.content)}>...</div>
 </div>
 ```
@@ -60,7 +60,7 @@ will be transformed into
 > will be transformed into
 >
 > ```svelte
-> <a href="#" {...attrs([styles.container, margin.xAuto])} title="example">...</div>
+> <a href="#" {...attrs(styles.container, margin.xAuto)} title="example">...</div>
 > ```
 
 ## Don't
