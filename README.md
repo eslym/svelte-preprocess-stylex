@@ -28,7 +28,7 @@ import { stylexPreprocess } from '@eslym/svelte-preprocess-stylex';
 
 export default {
     preprocess: [
-        stylexPreprocess(),
+        stylexPreprocess()
         /* other preprocessors */
     ]
 };
@@ -37,8 +37,8 @@ export default {
 After using this preprocessor, you can use `stylex` attribute (html elements only) for stylex styles.
 
 ```svelte
-<div stylex={[styles.container, margin.xAuto]}>
-    <div stylex={styles.content}>...</div>
+<div stylex-attrs={[styles.container, margin.xAuto]}>
+    <div stylex-attrs={styles.content}>...</div>
 </div>
 ```
 
@@ -54,7 +54,7 @@ will be transformed into
 > The order of attributes will stay at where it is.
 >
 > ```svelte
-> <a href="#" stylex={[styles.container, margin.xAuto]} title="example">...</div>
+> <a href="#" stylex-attrs={[styles.container, margin.xAuto]} title="example">...</div>
 > ```
 >
 > will be transformed into
@@ -63,7 +63,7 @@ will be transformed into
 > <a href="#" {...attrs(styles.container, margin.xAuto)} title="example">...</div>
 > ```
 
-## Don't
+### Don't
 
 Spread attribute is not supported.
 
@@ -75,7 +75,7 @@ Spread attribute is not supported.
         attrs = {}
     }: {
         attrs?: {
-            stylex?: StyleXStyles;
+            ['stylex-attrs']?: StyleXStyles;
         };
     } = $props();
 </script>
@@ -84,7 +84,7 @@ Spread attribute is not supported.
 <div {...attrs}>...</div>
 ```
 
-## Do
+### Do
 
 Extract the value from object and pass it to the element.
 
@@ -96,23 +96,50 @@ Extract the value from object and pass it to the element.
         attrs = {}
     }: {
         attrs?: {
-            stylex?: StyleXStyles;
+            ['stylex-attrs']?: StyleXStyles;
         };
     } = $props();
 
-    let stylex = $derived(attrs.stylex);
+    let stylex = $derived(attrs['stylex-attrs']);
 </script>
 
-<!-- this is ok, shorthand attribute is supported -->
-<div {stylex}>...</div>
+<div stylex-attrs={stylex}>...</div>
 ```
+
+## Experimental Feature
+
+There is an experimental `stylex-create` attribute to inline the creation of stylex styles.
+
+```svelte
+<div stylex-create={{ color: 'red' }} stylex-attrs={someStyles}>...</div>
+```
+
+will be transformed into
+
+```svelte
+<script module>
+    const __styles = stylex.create({
+        a_generated_key: { color: 'red' }
+    });
+</script>
+
+<!-- the inline create is always the base style, the original order does not matter -->
+<div {...attrs(someStyles, __styles.a_generated_key)}>...</div>
+```
+
+The stability of this feature is not guaranteed, so use at your own risk.
 
 ## Typesafety
 
 Add the following code into any ambient `.d.ts` file to enable typesafety. (ex: `src/app.d.ts` for sveltekit)
 
 ```ts
-import type { CompiledStyles, StyleXArray, InlineStyles } from '@stylexjs/stylex/lib/StyleXTypes';
+import type {
+    CompiledStyles,
+    StyleXArray,
+    InlineStyles,
+    UserAuthoredStyles
+} from '@stylexjs/stylex/lib/StyleXTypes';
 
 declare global {
     type StyleXAttr = StyleXArray<
@@ -122,7 +149,13 @@ declare global {
 
 declare module 'svelte/elements' {
     export interface HTMLAttributes<T> {
-        stylex?: StyleXAttr | readonly StyleXAttr[];
+        ['stylex-attrs']?: StyleXAttr | readonly StyleXAttr[];
+        ['stylex-create']?: UserAuthoredStyles; // if you need
+    }
+
+    export interface SVGAttributes<T> {
+        ['stylex-attrs']?: StyleXAttr | readonly StyleXAttr[];
+        ['stylex-create']?: UserAuthoredStyles; // if you need
     }
 }
 

@@ -25,10 +25,14 @@
     } = $props();
 </script>
 
-<div stylex={[styles.container, containerStyles]}>
-    <h1 stylex={styles.title}>Hello World!</h1>
-    <p {stylex}>
+<div stylex-attrs={[styles.container, containerStyles]}>
+    <h1 stylex-attrs={styles.title}>Hello World!</h1>
+    <p
+        stylex-attrs={stylex}
+        stylex-create={{
+            lineHeight: 1.5
+        }}
+    >
         {@render children()}
     </p>
-    <p {...{ stylex }}>This will not be transformed.</p>
 </div>

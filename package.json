@@ -1,6 +1,6 @@
 {
   "name": "@eslym/svelte-preprocess-stylex",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "module": "index.ts",
   "type": "module",
   "description": "Svelte preprocessor to make stylex more readable in svelte.",

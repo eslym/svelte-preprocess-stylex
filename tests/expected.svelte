@@ -1,4 +1,7 @@
-<script lang="ts" module>
+<script lang="ts" module>const __styles = __stylex.create(_32$23_34$9: {
+            lineHeight: 1.5
+        });
+
     const styles = create({
         container: {
             maxWidth: '1200px',
@@ -10,7 +13,7 @@
     });
 </script>
 
-<script lang="ts">import { attrs as _stylex_attrs } from "@stylexjs/stylex";
+<script lang="ts">import __stylex from "@stylexjs/stylex";
 
     import type { Snippet } from 'svelte';
     import { create, type StyleXStyles } from '@stylexjs/stylex';
@@ -26,10 +29,12 @@
     } = $props();
 </script>
 
-<div {..._stylex_attrs(styles.container, containerStyles)}>
-    <h1 {..._stylex_attrs(styles.title)}>Hello World!</h1>
-    <p {..._stylex_attrs(stylex)}>
+<div {...__stylex.attrs(styles.container, containerStyles)}>
+    <h1 {...__stylex.attrs(styles.title)}>Hello World!</h1>
+    <p
+        {...__stylex.attrs(__styles._32$23_34$9, stylex)}
+        
+    >
         {@render children()}
     </p>
-    <p {...{ stylex }}>This will not be transformed.</p>
 </div>
