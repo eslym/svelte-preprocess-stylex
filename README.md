@@ -20,7 +20,7 @@ pnpm add -D @eslym/svelte-preprocess-stylex
 bun add -d @eslym/svelte-preprocess-stylex
 ```
 
-## Usage
+## Usage: `stylex-attrs`
 
 ```js
 // svelte.config.js
@@ -63,50 +63,51 @@ will be transformed into
 > <a href="#" {...attrs(styles.container, margin.xAuto)} title="example">...</div>
 > ```
 
-### Don't
+> [!COUTION]
+> ### Don't
+> 
+> Spread attribute is not supported.
+> 
+> ```svelte
+> <script lang="ts">
+>     import type { StyleXStyles } from '@stylexjs/stylex';
+> 
+>     let {
+>         attrs = {}
+>     }: {
+>         attrs?: {
+>             ['stylex-attrs']?: StyleXStyles;
+>         };
+>     } = $props();
+> </script>
+> 
+> <!-- this will not work, preprocessor doesn't > know what is in the object -->
+> <div {...attrs}>...</div>
+> ```
 
-Spread attribute is not supported.
+> [!TIP]
+> ### Do
+> Extract the value from object and pass it to > the element.
+> 
+> ```svelte
+> <script lang="ts">
+>     import type { StyleXStyles } from '@stylexjs/stylex';
+> 
+>     let {
+>         attrs = {}
+>     }: {
+>         attrs?: {
+>             ['stylex-attrs']?: StyleXStyles;
+>         };
+>     } = $props();
+> 
+>     let stylex = $derived(attrs['stylex-attrs']);
+> </script>
+> 
+> <div stylex-attrs={stylex}>...</div>
+> ```
 
-```svelte
-<script lang="ts">
-    import type { StyleXStyles } from '@stylexjs/stylex';
-
-    let {
-        attrs = {}
-    }: {
-        attrs?: {
-            ['stylex-attrs']?: StyleXStyles;
-        };
-    } = $props();
-</script>
-
-<!-- this will not work, preprocessor doesn't know what is in the object -->
-<div {...attrs}>...</div>
-```
-
-### Do
-
-Extract the value from object and pass it to the element.
-
-```svelte
-<script lang="ts">
-    import type { StyleXStyles } from '@stylexjs/stylex';
-
-    let {
-        attrs = {}
-    }: {
-        attrs?: {
-            ['stylex-attrs']?: StyleXStyles;
-        };
-    } = $props();
-
-    let stylex = $derived(attrs['stylex-attrs']);
-</script>
-
-<div stylex-attrs={stylex}>...</div>
-```
-
-## Experimental Feature
+## Usag: `stylex-create` (experimental)
 
 There is an experimental `stylex-create` attribute to inline the creation of stylex styles.
 

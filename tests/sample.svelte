@@ -25,6 +25,12 @@
     } = $props();
 </script>
 
+<header stylex-create={{
+    position: 'stickty',
+    top: 0,
+}}>
+    This is header
+</header>
 <div stylex-attrs={[styles.container, containerStyles]}>
     <h1 stylex-attrs={styles.title}>Hello World!</h1>
     <p

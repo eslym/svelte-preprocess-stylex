@@ -166,7 +166,7 @@ export function stylexPreprocess(options: StylexPreprocessOptions = {}): Preproc
             if (ast.instance) {
                 result.prependLeft(
                     ast.instance.content.start,
-                    `import ${stylex_alias} from ${JSON.stringify(stylex_import)};\n`
+                    `\nimport ${stylex_alias} from ${JSON.stringify(stylex_import)};\n`
                 );
             } else {
                 result.prepend(
@@ -175,9 +175,9 @@ export function stylexPreprocess(options: StylexPreprocessOptions = {}): Preproc
             }
 
             if (creates.length) {
-                const create_statement = `const ${stylex_create_var} = ${stylex_alias}.create(${creates.join(',')});\n`;
+                const create_statement = `\nconst ${stylex_create_var} = ${stylex_alias}.create(${creates.join(',')});\n`;
                 if (ast.module) {
-                    result.prependLeft(ast.module.content.start, create_statement);
+                    result.appendRight(ast.module.content.end, create_statement);
                 } else {
                     result.prepend(`<script module>${create_statement}</script>`);
                 }

@@ -1,7 +1,4 @@
-<script lang="ts" module>const __styles = __stylex.create(_32$23_34$9: {
-            lineHeight: 1.5
-        });
-
+<script lang="ts" module>
     const styles = create({
         container: {
             maxWidth: '1200px',
@@ -11,9 +8,17 @@
             fontSize: '2rem'
         }
     });
+
+const __styles = __stylex.create(_28$23_31$1: {
+    position: 'stickty',
+    top: 0,
+},_38$23_40$9: {
+            lineHeight: 1.5
+        });
 </script>
 
-<script lang="ts">import __stylex from "@stylexjs/stylex";
+<script lang="ts">
+import __stylex from "@stylexjs/stylex";
 
     import type { Snippet } from 'svelte';
     import { create, type StyleXStyles } from '@stylexjs/stylex';
@@ -29,10 +34,13 @@
     } = $props();
 </script>
 
+<header {...__stylex.attrs(__styles._28$23_31$1)}>
+    This is header
+</header>
 <div {...__stylex.attrs(styles.container, containerStyles)}>
     <h1 {...__stylex.attrs(styles.title)}>Hello World!</h1>
     <p
-        {...__stylex.attrs(__styles._32$23_34$9, stylex)}
+        {...__stylex.attrs(__styles._38$23_40$9, stylex)}
         
     >
         {@render children()}
