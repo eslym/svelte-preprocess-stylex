@@ -63,7 +63,7 @@ will be transformed into
 > <a href="#" {...attrs(styles.container, margin.xAuto)} title="example">...</div>
 > ```
 
-> [!COUTION]
+> [!CAUTION]
 > ### Don't
 > 
 > Spread attribute is not supported.
