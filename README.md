@@ -87,7 +87,7 @@ will be transformed into
 
 > [!TIP]
 > ### Do
-> Extract the value from object and pass it to > the element.
+> Extract the value from object and pass it to the element.
 > 
 > ```svelte
 > <script lang="ts">
