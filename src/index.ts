@@ -58,6 +58,10 @@ export function stylexPreprocess(options: StylexPreprocessOptions = {}): Preproc
     return {
         name: 'stylex-preprocess',
         markup({ content, filename }) {
+            if (!content.includes(stylex_attr) && !content.includes(stylex_create_attr)) {
+                return;
+            }
+
             const result = new MagicString(content);
             const ast = parse(content, { filename, modern: true }) as AST.Root;
 
@@ -69,6 +73,7 @@ export function stylexPreprocess(options: StylexPreprocessOptions = {}): Preproc
                         expr: Expression;
                     };
                     create?: {
+                        el: HTMLElement;
                         attr: AST.Attribute;
                         expr: Expression;
                     };
@@ -86,7 +91,7 @@ export function stylexPreprocess(options: StylexPreprocessOptions = {}): Preproc
 
             function set_create(
                 node: AST.ElementLike,
-                create: { attr: AST.Attribute; expr: Expression }
+                create: { el: HTMLElement; attr: AST.Attribute; expr: Expression }
             ) {
                 const existing = to_transform.get(node) || {};
                 existing.create = create;
@@ -103,7 +108,7 @@ export function stylexPreprocess(options: StylexPreprocessOptions = {}): Preproc
                                 set_attrs(el, { attr, expr: expr_tag.expression });
                                 break;
                             case stylex_create_attr:
-                                set_create(el, { attr, expr: expr_tag.expression });
+                                set_create(el, { el, attr, expr: expr_tag.expression });
                                 break;
                         }
                     } else if (attr.type === 'SpreadAttribute') {
@@ -128,7 +133,7 @@ export function stylexPreprocess(options: StylexPreprocessOptions = {}): Preproc
                 if (create) {
                     const expr = create.expr;
                     const src = content.substring(expr.start, expr.end);
-                    styles_prepend = `${pos(expr.loc!.start)}${pos(expr.loc!.end)}`;
+                    styles_prepend = style_name(create.el, expr);
                     creates.push(`${styles_prepend}: ${src}`);
                     result.remove(create.attr.start, create.attr.end);
                 }
@@ -175,7 +180,7 @@ export function stylexPreprocess(options: StylexPreprocessOptions = {}): Preproc
             }
 
             if (creates.length) {
-                const create_statement = `\nconst ${stylex_create_var} = ${stylex_alias}.create(${creates.join(',')});\n`;
+                const create_statement = `\nconst ${stylex_create_var} = ${stylex_alias}.create({${creates.join(',')}});\n`;
                 if (ast.module) {
                     result.appendRight(ast.module.content.end, create_statement);
                 } else {
@@ -240,6 +245,8 @@ function is_node<T extends NodeLike>(
     return maybe_node?.type === type;
 }
 
-function pos(position: Position) {
-    return `_${position.line}\$${position.column}`;
+function style_name(element: HTMLElement, expr: Expression) {
+    const el = element.type === 'RegularElement' ? element.name : 'el';
+    const pos = expr.loc!.start;
+    return `${el}\$${pos.line}_${pos.column}`;
 }
