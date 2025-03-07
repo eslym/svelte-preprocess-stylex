@@ -9,10 +9,10 @@
         }
     });
 
-const __styles = __stylex.create({header$28_23: {
-    position: 'stickty',
-    top: 0,
-},p$38_23: {
+const __styles = __stylex.create({header$29_19: {
+        position: 'stickty',
+        top: 0
+    },p$41_23: {
             lineHeight: 1.5
         }});
 </script>
@@ -34,13 +34,16 @@ import * as __stylex from "@stylexjs/stylex";
     } = $props();
 </script>
 
-<header {...__stylex.attrs(__styles.header$28_23)}>
+<header
+    {...__stylex.attrs(__styles.header$29_19)}
+>
     This is header
 </header>
 <div {...__stylex.attrs(styles.container, containerStyles)}>
     <h1 {...__stylex.attrs(styles.title)}>Hello World!</h1>
     <p
-        {...__stylex.attrs(__styles.p$38_23, stylex)}
+        {...__stylex.attrs(stylex, __styles.p$41_23)}
+        
         
     >
         {@render children()}
