@@ -171,11 +171,11 @@ export function stylexPreprocess(options: StylexPreprocessOptions = {}): Preproc
             if (ast.instance) {
                 result.prependLeft(
                     ast.instance.content.start,
-                    `\nimport ${stylex_alias} from ${JSON.stringify(stylex_import)};\n`
+                    `\nimport * as ${stylex_alias} from ${JSON.stringify(stylex_import)};\n`
                 );
             } else {
                 result.prepend(
-                    `<script>import ${stylex_alias} from ${JSON.stringify(stylex_import)};</script>`
+                    `<script>import * as ${stylex_alias} from ${JSON.stringify(stylex_import)};</script>`
                 );
             }
 

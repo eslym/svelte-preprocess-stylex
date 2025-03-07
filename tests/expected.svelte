@@ -18,7 +18,7 @@ const __styles = __stylex.create({header$28_23: {
 </script>
 
 <script lang="ts">
-import __stylex from "@stylexjs/stylex";
+import * as __stylex from "@stylexjs/stylex";
 
     import type { Snippet } from 'svelte';
     import { create, type StyleXStyles } from '@stylexjs/stylex';
