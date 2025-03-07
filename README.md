@@ -64,14 +64,15 @@ will be transformed into
 > ```
 
 > [!CAUTION]
+>
 > ### Don't
-> 
+>
 > Spread attribute is not supported.
-> 
+>
 > ```svelte
 > <script lang="ts">
 >     import type { StyleXStyles } from '@stylexjs/stylex';
-> 
+>
 >     let {
 >         attrs = {}
 >     }: {
@@ -80,19 +81,21 @@ will be transformed into
 >         };
 >     } = $props();
 > </script>
-> 
+>
 > <!-- this will not work, preprocessor doesn't > know what is in the object -->
 > <div {...attrs}>...</div>
 > ```
 
 > [!TIP]
+>
 > ### Do
+>
 > Extract the value from object and pass it to the element.
-> 
+>
 > ```svelte
 > <script lang="ts">
 >     import type { StyleXStyles } from '@stylexjs/stylex';
-> 
+>
 >     let {
 >         attrs = {}
 >     }: {
@@ -100,10 +103,10 @@ will be transformed into
 >             ['stylex-attrs']?: StyleXStyles;
 >         };
 >     } = $props();
-> 
+>
 >     let stylex = $derived(attrs['stylex-attrs']);
 > </script>
-> 
+>
 > <div stylex-attrs={stylex}>...</div>
 > ```
 
@@ -124,7 +127,7 @@ will be transformed into
     });
 </script>
 
-<!-- the inline create is always the base style, the original order does not matter -->
+<!-- the position to insert inline create is controlled by stylex-create-at attribute, the original order does not matter -->
 <div {...attrs(someStyles, __styles.a_generated_key)}>...</div>
 ```
 
@@ -150,13 +153,15 @@ declare global {
 
 declare module 'svelte/elements' {
     export interface HTMLAttributes<T> {
-        ['stylex-attrs']?: StyleXAttr | readonly StyleXAttr[];
-        ['stylex-create']?: UserAuthoredStyles; // if you need
+        'stylex-attrs'?: StyleXAttr | readonly StyleXAttr[];
+        'stylex-create'?: UserAuthoredStyles; // if you need
+        'stylex-create-at'?: number; // if you need
     }
 
     export interface SVGAttributes<T> {
-        ['stylex-attrs']?: StyleXAttr | readonly StyleXAttr[];
-        ['stylex-create']?: UserAuthoredStyles; // if you need
+        'stylex-attrs'?: StyleXAttr | readonly StyleXAttr[];
+        'stylex-create'?: UserAuthoredStyles; // if you need
+        'stylex-create-at'?: number; // if you need
     }
 }
 
