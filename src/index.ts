@@ -53,6 +53,15 @@ export interface StylexPreprocessOptions {
      * @default '__styles'
      */
     createVarName?: string;
+
+    /**
+     * Omit `stylex.attrs(...).style`, giving up the ability for dynamic styles.
+     * Since svelte has its own `style:` directive for dynamic styles, the stylex dynamic
+     * styles are not necessary in most cases.
+     *
+     * @default false
+     */
+    classOnly?: boolean;
 }
 
 export function stylexPreprocess(options: StylexPreprocessOptions = {}): PreprocessorGroup {
@@ -62,7 +71,8 @@ export function stylexPreprocess(options: StylexPreprocessOptions = {}): Preproc
         createAtAttrName: stylex_create_at_attr = 'stylex-create-at',
         createVarName: stylex_create_var = '__styles',
         stylexImport: stylex_import = '@stylexjs/stylex',
-        stylexAs: stylex_alias = '__stylex'
+        stylexAs: stylex_alias = '__stylex',
+        classOnly: stylex_class_only = false
     } = options;
     let warn_stylex_create = true;
     let warn_stylex_create_at = true;
@@ -189,6 +199,7 @@ export function stylexPreprocess(options: StylexPreprocessOptions = {}): Preproc
                     creates.push(`${styles_insert}: ${src}`);
                     result.remove(create.attr.start, create.attr.end);
                 }
+                let replace: [number, number, string] | undefined;
                 if (attrs) {
                     const args_elements = wrap_array(attrs.expr);
                     const args = [];
@@ -199,16 +210,24 @@ export function stylexPreprocess(options: StylexPreprocessOptions = {}): Preproc
                     if (styles_insert) {
                         args.splice(at, 0, `${stylex_create_var}.${styles_insert}`);
                     }
-                    result.update(
+                    replace = [
                         attrs.attr.start,
                         attrs.attr.end,
-                        `{...${stylex_alias}.attrs(${args.join(', ')})}`
-                    );
+                        `${stylex_alias}.attrs(${args.join(', ')})`
+                    ];
                 } else if (create) {
-                    result.update(
+                    replace = [
                         create.attr.start,
                         create.attr.end,
-                        `{...${stylex_alias}.attrs(${stylex_create_var}.${styles_insert})}`
+                        `${stylex_alias}.attrs(${stylex_create_var}.${styles_insert})`
+                    ];
+                }
+                if (replace) {
+                    const [start, end, expr] = replace;
+                    result.update(
+                        start,
+                        end,
+                        stylex_class_only ? `class={${expr}.class}` : `{...${expr}}`
                     );
                 }
             }
