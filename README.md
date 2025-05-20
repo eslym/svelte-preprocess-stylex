@@ -138,28 +138,17 @@ The stability of this feature is not guaranteed, so use at your own risk.
 Add the following code into any ambient `.d.ts` file to enable typesafety. (ex: `src/app.d.ts` for sveltekit)
 
 ```ts
-import type {
-    CompiledStyles,
-    StyleXArray,
-    InlineStyles,
-    UserAuthoredStyles
-} from '@stylexjs/stylex/lib/StyleXTypes';
-
-declare global {
-    type StyleXAttr = StyleXArray<
-        (null | undefined | CompiledStyles) | boolean | Readonly<[CompiledStyles, InlineStyles]>
-    >;
-}
+import type { StyleXAttr, UserAuthoredStyles } from '@eslym/svelte-preprocess-stylex';
 
 declare module 'svelte/elements' {
     export interface HTMLAttributes<T> {
-        'stylex-attrs'?: StyleXAttr | readonly StyleXAttr[];
+        'stylex-attrs'?: StyleXAttr;
         'stylex-create'?: UserAuthoredStyles; // if you need
         'stylex-create-at'?: number; // if you need
     }
 
     export interface SVGAttributes<T> {
-        'stylex-attrs'?: StyleXAttr | readonly StyleXAttr[];
+        'stylex-attrs'?: StyleXAttr;
         'stylex-create'?: UserAuthoredStyles; // if you need
         'stylex-create-at'?: number; // if you need
     }

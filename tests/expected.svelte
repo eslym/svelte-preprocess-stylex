@@ -19,6 +19,7 @@ const __styles = __stylex.create({header$29_19: {
 
 <script lang="ts">
 import * as __stylex from "@stylexjs/stylex";
+import { propsToAttrs as __attrs } from "@eslym/svelte-preprocess-stylex/runtime";
 
     import type { Snippet } from 'svelte';
     import { create, type StyleXStyles } from '@stylexjs/stylex';
@@ -35,14 +36,14 @@ import * as __stylex from "@stylexjs/stylex";
 </script>
 
 <header
-    {...__stylex.attrs(__styles.header$29_19)}
+    {...__attrs(__stylex.props(__styles.header$29_19))}
 >
     This is header
 </header>
-<div {...__stylex.attrs(styles.container, containerStyles)}>
-    <h1 {...__stylex.attrs(styles.title)}>Hello World!</h1>
+<div {...__attrs(__stylex.props(styles.container, containerStyles))}>
+    <h1 {...__attrs(__stylex.props(styles.title))}>Hello World!</h1>
     <p
-        {...__stylex.attrs(stylex, __styles.p$41_23)}
+        {...__attrs(__stylex.props(stylex, __styles.p$41_23))}
         
         
     >

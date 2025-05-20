@@ -1,6 +1,6 @@
 {
   "name": "@eslym/svelte-preprocess-stylex",
-  "version": "0.1.5",
+  "version": "0.2.0",
   "module": "index.ts",
   "type": "module",
   "description": "Svelte preprocessor to make stylex more readable in svelte.",
@@ -24,6 +24,11 @@
       "import": "./dist/index.mjs",
       "require": "./dist/index.cjs",
       "types": "./dist/index.d.ts"
+    },
+    "./runtime": {
+      "import": "./dist/runtime.mjs",
+      "require": "./dist/runtime.cjs",
+      "types": "./dist/runtime.d.ts"
     }
   },
   "files": [
@@ -48,9 +53,7 @@
   },
   "peerDependencies": {
     "magic-string": ">=0.30.11",
-    "svelte": ">=5.0.0"
-  },
-  "optionalDependencies": {
-    "@stylexjs/stylex": "^0.11.1"
+    "svelte": ">=5.0.0",
+    "@stylexjs/stylex": "^0.13.0"
   }
 }

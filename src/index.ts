@@ -1,6 +1,7 @@
 import { parse, type AST, type PreprocessorGroup } from 'svelte/compiler';
 import MagicString from 'magic-string';
 import type { Expression, SpreadElement } from 'estree';
+export * from '@eslym/svelte-preprocess-stylex/runtime';
 
 export interface StylexPreprocessOptions {
     /**
@@ -213,13 +214,13 @@ export function stylexPreprocess(options: StylexPreprocessOptions = {}): Preproc
                     replace = [
                         attrs.attr.start,
                         attrs.attr.end,
-                        `${stylex_alias}.attrs(${args.join(', ')})`
+                        `__attrs(${stylex_alias}.props(${args.join(', ')}))`
                     ];
                 } else if (create) {
                     replace = [
                         create.attr.start,
                         create.attr.end,
-                        `${stylex_alias}.attrs(${stylex_create_var}.${styles_insert})`
+                        `__attrs(${stylex_alias}.props(${stylex_create_var}.${styles_insert}))`
                     ];
                 }
                 if (replace) {
@@ -232,15 +233,12 @@ export function stylexPreprocess(options: StylexPreprocessOptions = {}): Preproc
                 }
             }
 
+            const import_statement = `\nimport * as ${stylex_alias} from ${JSON.stringify(stylex_import)};\nimport { propsToAttrs as __attrs } from "@eslym/svelte-preprocess-stylex/runtime";\n`;
+
             if (ast.instance) {
-                result.prependLeft(
-                    ast.instance.content.start,
-                    `\nimport * as ${stylex_alias} from ${JSON.stringify(stylex_import)};\n`
-                );
+                result.prependLeft(ast.instance.content.start, import_statement);
             } else {
-                result.prepend(
-                    `<script>import * as ${stylex_alias} from ${JSON.stringify(stylex_import)};</script>`
-                );
+                result.prepend(`<script>${import_statement}</script>`);
             }
 
             if (creates.length) {
